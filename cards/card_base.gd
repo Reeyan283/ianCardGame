@@ -7,7 +7,7 @@ var card_name = "castle"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print(card_img_path)
+
 	var card_size = size
 	
 	var card = Sprite2D.new()
@@ -17,6 +17,8 @@ func _ready():
 	
 	add_child(card)
 	
+	print(card_img_path)
+	print(get_child_count())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
