@@ -1,3 +1,4 @@
-const CARD_LIST = [
-	"castle"
+@export var current_card_list: Array =  [
+	"castle",
+	"house"
 ]
