@@ -1,8 +1,6 @@
 extends MarginContainer
 
 @onready var card_database: Script = preload("res://assets/cards/card_database.gd")
-@onready var play_space = $'../../../'
-
 var card_name : String
 @onready var card_info: Array = card_database.DATA.get(card_database[card_name])
 @onready var card_img_path: String = str("res://assets/cards/", card_info[0], "/", card_name, ".png")
@@ -18,7 +16,6 @@ var draw_time: float = 1
 var organize_time: float = 0.2
 var focus_time: float = 0.25
 var freeze_time: float = 0
-var in_mouse_time: float = 0.1
 var draw_shift_delay: float = 0.55
 
 # Card States
@@ -51,9 +48,8 @@ var hand_pos: Vector2 = Vector2()
 var focus_size: float = 2
 var focus_organize_flag: bool = true
 var hand_card_count: int = 0
-var card_select_flag: bool = true
 var index = 0
-
+	
 func _physics_process(delta):
 	match state:
 		InHand:
@@ -61,17 +57,7 @@ func _physics_process(delta):
 		InPlay:
 			pass
 		InMouse:
-			if setup_flag:
-				setup()
-			if t <=1:
-				position = start_pos.lerp(get_global_mouse_position() - play_space.CARD_SIZE * .5, t)
-				rotation = start_rot * (1-t) + 0*t
-				scale = start_scale * (1-t) + orignal_scale * t
-				
-				increment_t(delta,in_mouse_time)
-			else:
-				position = get_global_mouse_position() - play_space.CARD_SIZE * .5
-				rotation = target_rot
+			pass
 		FocusInHand:
 			if setup_flag:
 				setup()
@@ -84,7 +70,7 @@ func _physics_process(delta):
 				
 				if focus_organize_flag:
 					focus_organize_flag = false
-					hand_card_count = get_parent().get_child_count()
+					hand_card_count = get_node("../../Cards").get_child_count()
 					
 					for i in hand_card_count:
 						if i < index:
@@ -98,29 +84,25 @@ func _physics_process(delta):
 				scale = orignal_scale * focus_size
 				
 		MoveDrawnCardToHand:
-			if setup_flag:
-				setup()
 			if t <=1:
+				print(target_pos)
 				position = start_pos.lerp(target_pos, t)
 				rotation = start_rot * (1-t) + target_rot*t
 				scale.x = orignal_scale.x * abs(2*t - 1)
-				
 				if $CardBack.visible:
 					if t >= 0.5:
 						$CardBack.visible = false
-				
+				if t >= draw_shift_delay and draw_shift_flag:
+					$'../../'.alignCards()
+					draw_shift_flag = false
 				increment_t(delta,draw_time)
-				
-				#if t >= draw_shift_delay and draw_shift_flag:
-				#	play_space.alignCards(true, 1)
-				#	draw_shift_flag = false
 			else:
+				print(target_pos)
 				position = target_pos
 				rotation = target_rot
 				scale.x = orignal_scale.x
 				state = InHand
 				t = 0
-
 		OrganiseHand:
 			if setup_flag:
 				setup()
@@ -149,60 +131,12 @@ func align_neighbor_card(card_index : int, right : bool, spread_factor: float):
 	if not card.state == MoveDrawnCardToHand:
 		card.state = OrganiseHand
 
-func find_nearest_slot():
-	var adjusted_pos = position + play_space.CARD_SIZE * .5
-	var nearest_slot = INF
-	var largest_dist = -INF
-	var largest_slot_pos = []
-	for card_slot in play_space.find_child("CardSlots").get_children():
-		var card_slot_pos = card_slot.position + play_space.CARD_SIZE * .5
-		var dist = sqrt(((card_slot_pos.x - adjusted_pos.x) * (card_slot_pos.x - adjusted_pos.x)) + ((card_slot_pos.y - adjusted_pos.y) * (card_slot_pos.y - adjusted_pos.y)))
-		
-		if dist > largest_dist:
-			largest_dist = dist
-			nearest_slot = card_slot
-			largest_slot_pos = card_slot_pos
-		
-	return [largest_dist, nearest_slot]
 func setup():
 	start_pos = position
 	start_rot = rotation
 	start_scale = scale
 	t = 0
 	setup_flag = false
-	
-func _input(event):
-	match state:
-		FocusInHand, InMouse:
-			if event.is_action_pressed("ui_select"):
-				if card_select_flag:
-					state = InMouse
-					setup_flag = true
-					card_select_flag = false
-			elif event.is_action_released("ui_select"):
-				if not card_select_flag:
-					var nearest_slot_dist = find_nearest_slot()[0]
-					var nearest_slot = find_nearest_slot()[1]
-					print(nearest_slot.get_child_count())
-					if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
-						position = find_nearest_slot()[1].position
-						state = InPlay
-						reparent(find_nearest_slot()[1])
-						
-						play_space.alignCards(false, 0)
-						setup_flag = true
-						focus_organize_flag = true
-						card_select_flag = true
-					else:
-						target_pos = hand_pos
-						state = OrganiseHand
-						play_space.alignCards(false, 0)
-						setup_flag = true
-						focus_organize_flag = true
-						card_select_flag = true
-			
-		InPlay:
-			pass
 
 func _on_focus_mouse_entered():
 	match state:
@@ -211,8 +145,7 @@ func _on_focus_mouse_entered():
 			target_rot = 0
 			target_pos = hand_pos
 			freeze_time = 0
-			target_pos.y = get_viewport().size.y - play_space.CARD_SIZE.y * focus_size * .75
-
+			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * .87
 			state = FocusInHand
 
 
@@ -221,7 +154,7 @@ func _on_focus_mouse_exited():
 		FocusInHand:
 			target_pos = hand_pos
 			state = OrganiseHand
-			play_space.alignCards(false, 0)
+			$'../../'.alignCards()
 			setup_flag = true
 			focus_organize_flag = true
 			
