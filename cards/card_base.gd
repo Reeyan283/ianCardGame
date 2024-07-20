@@ -13,7 +13,7 @@ var start_rot = 0
 var target_rot = 0
 var t = 0 
 var draw_time: float = 1
-var organize_time: float = .5
+var organize_time: float = .2
 var focus_time: float = 0.2
 
 # Card States
@@ -137,7 +137,7 @@ func _on_focus_mouse_entered():
 			target_rot = 0
 			target_pos = hand_pos
 
-			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * 1.75
+			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * 1.57
 
 			state = FocusInHand
 
@@ -147,6 +147,6 @@ func _on_focus_mouse_exited():
 		FocusInHand:
 			target_pos = hand_pos
 			state = OrganiseHand
-			$'../../'.alignCards(get_node("../../Cards"), $'../../'.hand_spread_angle, false)
+			$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false)
 			setup_flag = true
 			focus_organize_flag = true
