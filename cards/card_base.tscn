@@ -1,13 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1146codjd6eh"]
+[gd_scene load_steps=3 format=3 uid="uid://c1146codjd6eh"]
 
 [ext_resource type="Script" path="res://cards/card_base.gd" id="1_nolih"]
-[ext_resource type="Texture2D" uid="uid://cxq0vycrpbb40" path="res://assets/cards/focusBorder.png" id="2_1qgjo"]
 [ext_resource type="Texture2D" uid="uid://b2irq0f3xkld" path="res://assets/cards/back.png" id="3_2q82y"]
 
 [node name="CardBase" type="MarginContainer"]
-offset_right = 480.0
-offset_bottom = 480.0
-pivot_offset = Vector2(240, 240)
+offset_right = 128.0
+offset_bottom = 128.0
+pivot_offset = Vector2(64, 64)
 script = ExtResource("1_nolih")
 
 [node name="Card" type="Sprite2D" parent="."]
@@ -15,7 +14,6 @@ centered = false
 
 [node name="Focus" type="TextureButton" parent="."]
 layout_mode = 2
-texture_hover = ExtResource("2_1qgjo")
 
 [node name="CardBack" type="Sprite2D" parent="."]
 texture = ExtResource("3_2q82y")

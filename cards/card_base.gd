@@ -83,6 +83,7 @@ func _physics_process(delta):
 				
 		MoveDrawnCardToHand:
 			if t <=1:
+				print(target_pos)
 				position = start_pos.lerp(target_pos, t)
 				rotation = start_rot * (1-t) + target_rot*t
 				scale.x = orignal_scale.x * abs(2*t - 1)
@@ -93,6 +94,7 @@ func _physics_process(delta):
 				
 				increment_t(delta,draw_time)
 			else:
+				print(target_pos)
 				position = target_pos
 				rotation = target_rot
 				scale.x = orignal_scale.x
@@ -140,7 +142,7 @@ func _on_focus_mouse_entered():
 			target_rot = 0
 			target_pos = hand_pos
 			freeze_time = 0
-			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * 1.57
+			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * .75
 
 			state = FocusInHand
 
