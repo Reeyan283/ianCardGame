@@ -42,7 +42,7 @@ func draw_card(deck : Array, deck_size : int) -> String:
 	
 	new_card.index = hand_card_count
 	
-	alignCards(get_node("Cards"), HAND_SPREAD_ANGLE, true)
+	alignCards(get_node("Cards"), HAND_SPREAD_ANGLE, true, 0.55)
 
 	$Cards.add_child(new_card)
 	
@@ -50,7 +50,7 @@ func draw_card(deck : Array, deck_size : int) -> String:
 	
 	return new_card.card_name
 	
-func alignCards(cards_node : Node, angle_iteration : float, new_card : bool):
+func alignCards(cards_node : Node, angle_iteration : float, new_card : bool, delay : float):
 	var card_count: int = cards_node.get_child_count()
 	if not new_card:
 		card_count -= 1
@@ -70,6 +70,8 @@ func alignCards(cards_node : Node, angle_iteration : float, new_card : bool):
 		if card.state == card.InHand:
 			card.state = card.OrganiseHand
 			card.start_pos = card.position
+			if card.freeze_time <= 0:
+				card.freeze_time = delay
 		elif card.state == card.MoveDrawnCardToHand:
 			card.start_pos = card.target_pos - ((card.target_pos - card.position)/(1-card.t))
 			

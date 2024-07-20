@@ -13,8 +13,9 @@ var start_rot = 0
 var target_rot = 0
 var t = 0 
 var draw_time: float = 1
-var organize_time: float = .2
-var focus_time: float = 0.2
+var organize_time: float = 0.25
+var focus_time: float = 0.3
+var freeze_time: float = 0
 
 # Card States
 enum{
@@ -63,7 +64,7 @@ func _physics_process(delta):
 				rotation = start_rot * (1-t) + target_rot * t
 				scale = start_scale * (1-t) + orignal_scale * focus_size * t
 					
-				t += delta/float(focus_time)
+				increment_t(delta,focus_time)
 				
 				if focus_organize_flag:
 					focus_organize_flag = false
@@ -90,7 +91,7 @@ func _physics_process(delta):
 					if t >= 0.5:
 						$CardBack.visible = false
 				
-				t += delta/float(draw_time)
+				increment_t(delta,draw_time)
 			else:
 				position = target_pos
 				rotation = target_rot
@@ -105,7 +106,7 @@ func _physics_process(delta):
 				position = start_pos.lerp(target_pos, t)
 				rotation = start_rot * (1-t) + target_rot*t
 				scale = start_scale * (1-t) + orignal_scale*t
-				t += delta/float(organize_time)
+				increment_t(delta,organize_time)
 			else:
 				position = target_pos
 				rotation = target_rot
@@ -120,8 +121,11 @@ func align_neighbor_card(card_index : int, right : bool, spread_factor: float):
 	else:
 		card.target_pos = card.hand_pos - spread_factor * Vector2(65, 0)
 	
+	card.freeze_time = 0
 	card.setup_flag = true
-	card.state = OrganiseHand
+	
+	if not card.state == MoveDrawnCardToHand:
+		card.state = OrganiseHand
 
 func setup():
 	start_pos = position
@@ -136,7 +140,7 @@ func _on_focus_mouse_entered():
 			setup_flag = true
 			target_rot = 0
 			target_pos = hand_pos
-
+			freeze_time = 0
 			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * 1.57
 
 			state = FocusInHand
@@ -147,6 +151,12 @@ func _on_focus_mouse_exited():
 		FocusInHand:
 			target_pos = hand_pos
 			state = OrganiseHand
-			$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false)
+			$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false, 0)
 			setup_flag = true
 			focus_organize_flag = true
+			
+func increment_t(delta, time : float):
+	if freeze_time > 0:
+		freeze_time -= delta
+	else:
+		t += delta/float(time)
