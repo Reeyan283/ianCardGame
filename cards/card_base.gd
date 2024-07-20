@@ -16,6 +16,7 @@ var draw_time: float = 1
 var organize_time: float = 0.2
 var focus_time: float = 0.25
 var freeze_time: float = 0
+var in_mouse_time: float = 0.1
 
 # Card States
 enum{
@@ -47,7 +48,27 @@ var focus_size: float = 2
 var focus_organize_flag: bool = true
 var hand_card_count: int = 0
 var index = 0
-	
+
+var card_select_flag: bool = true
+func _input(event):
+	match state:
+		FocusInHand, InMouse:
+			if event.is_action_pressed("ui_select"):
+				if card_select_flag:
+					state = InMouse
+					setup_flag = true
+					card_select_flag = false
+				else:
+					target_pos = hand_pos
+					state = OrganiseHand
+					$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false, 0)
+					setup_flag = true
+					focus_organize_flag = true
+					card_select_flag = true
+		InPlay:
+			pass
+		
+
 func _physics_process(delta):
 	match state:
 		InHand:
@@ -55,7 +76,17 @@ func _physics_process(delta):
 		InPlay:
 			pass
 		InMouse:
-			pass
+			if setup_flag:
+				setup()
+			if t <=1:
+				position = start_pos.lerp(get_global_mouse_position() - $'../../'.CARD_SIZE * .5, t)
+				rotation = start_rot * (1-t) + 0*t
+				scale = start_scale * (1-t) + orignal_scale * t
+				
+				increment_t(delta,in_mouse_time)
+			else:
+				position = get_global_mouse_position() - $'../../'.CARD_SIZE * .5
+				rotation = target_rot
 		FocusInHand:
 			if setup_flag:
 				setup()
@@ -82,8 +113,9 @@ func _physics_process(delta):
 				scale = orignal_scale * focus_size
 				
 		MoveDrawnCardToHand:
+			if setup_flag:
+				setup()
 			if t <=1:
-				print(target_pos)
 				position = start_pos.lerp(target_pos, t)
 				rotation = start_rot * (1-t) + target_rot*t
 				scale.x = orignal_scale.x * abs(2*t - 1)
