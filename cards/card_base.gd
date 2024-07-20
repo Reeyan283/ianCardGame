@@ -1,20 +1,20 @@
 extends MarginContainer
 
 @onready var card_database: Script = preload("res://assets/cards/card_database.gd")
-var card_name = "castle"
+var card_name : String
 @onready var card_info: Array = card_database.DATA.get(card_database[card_name])
 @onready var card_img_path: String = str("res://assets/cards/", card_info[0], "/", card_name, ".png")
 
 @onready var orignal_scale: Vector2 = scale
 
-var start_pos = 0
-var target_pos = 0
-var start_rot = 0
-var target_rot = 0
-var t = 0 
+var start_pos: Vector2 = Vector2()
+var target_pos: Vector2 = Vector2()
+var start_rot: float = 0
+var target_rot: float = 0
+var t: float = 0 
 var draw_time: float = 1
-var organize_time: float = 0.25
-var focus_time: float = 0.3
+var organize_time: float = 0.2
+var focus_time: float = 0.25
 var freeze_time: float = 0
 
 # Card States
@@ -98,7 +98,6 @@ func _physics_process(delta):
 				scale.x = orignal_scale.x
 				state = InHand
 				t = 0
-
 		OrganiseHand:
 			if setup_flag:
 				setup()

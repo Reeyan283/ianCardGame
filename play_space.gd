@@ -22,7 +22,7 @@ var hand_card_count = 0
 func _ready():
 	pass
 
-func draw_card(deck : Array, deck_size : int) -> String:
+func draw_card(deck : Array) -> String:
 	hand_circle_angle = PI/2 - HAND_SPREAD_ANGLE*(float(hand_card_count)/2)
 	
 	var new_card = CARD_BASE.instantiate()
@@ -57,7 +57,7 @@ func alignCards(cards_node : Node, angle_iteration : float, new_card : bool, del
 	var i = 0
 
 	for card : MarginContainer in cards_node.get_children():
-		var hand_circle_angle = PI/2 + angle_iteration * (float(card_count)/2 - i)
+		hand_circle_angle = PI/2 + angle_iteration * (float(card_count)/2 - i)
 		hand_circle_angle_vector = hand_circle_radius * Vector2(cos(hand_circle_angle), -sin(hand_circle_angle))
 		card.target_pos = hand_circle_center + hand_circle_angle_vector - card.size.x * Vector2(.5,.5)
 		card.hand_pos = card.target_pos
@@ -70,7 +70,7 @@ func alignCards(cards_node : Node, angle_iteration : float, new_card : bool, del
 		if card.state == card.InHand:
 			card.state = card.OrganiseHand
 			card.start_pos = card.position
-			if card.freeze_time <= 0:
+			if card.target_pos == card.position:
 				card.freeze_time = delay
 		elif card.state == card.MoveDrawnCardToHand:
 			card.start_pos = card.target_pos - ((card.target_pos - card.position)/(1-card.t))

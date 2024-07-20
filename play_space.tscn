@@ -12,7 +12,8 @@ script = ExtResource("1_1f80y")
 [node name="Cards" type="Node" parent="."]
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 540)
+visible = false
+position = Vector2(963, 544)
 texture = ExtResource("2_5q7mh")
 
 [node name="Deck" type="Node2D" parent="."]
@@ -29,3 +30,10 @@ texture_hover = ExtResource("3_nnov3")
 texture_disabled = ExtResource("4_m63wi")
 stretch_mode = 0
 script = ExtResource("5_cfhi0")
+
+[node name="GameBoard" type="GridContainer" parent="."]
+offset_left = 582.0
+offset_top = 155.0
+offset_right = 1279.0
+offset_bottom = 831.0
+columns = 7
