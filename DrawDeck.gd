@@ -1,6 +1,6 @@
 extends TextureButton
 
-@export var draw_card_list: Array =  [
+var draw_card_list: Array =  [
 	"castle",
 	"house",
 	"house",
@@ -15,7 +15,7 @@ var deck_size = draw_card_list.size()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	scale *= $'../../'.CARD_SIZE/size
+	scale = $'../../'.CARD_SIZE/size
 	pass # Replace with function body.
 
 
