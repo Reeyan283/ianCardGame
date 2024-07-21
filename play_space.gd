@@ -20,4 +20,4 @@ func draw_card(input_card : String):
 	
 	$Cards.add_child(new_card)
 	
-	new_card.reposition(new_card.MoveDrawnCardToHand)
+	new_card.reposition(new_card.MovingLong)

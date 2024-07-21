@@ -30,6 +30,5 @@ func _gui_input(_event):
 			$'../../'.draw_card(draw_card_list[0])
 			draw_card_list.remove_at(0)
 			deck_size -= 1
-			
 			if deck_size <= 0:
 				disabled = true

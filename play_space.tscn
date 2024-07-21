@@ -15,10 +15,6 @@ script = ExtResource("1_1f80y")
 [node name="Cards" type="Node" parent="."]
 script = ExtResource("2_yhdw5")
 
-[node name="Hand" type="Node" parent="Cards"]
-
-[node name="Playing" type="Node" parent="Cards"]
-
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(963, 544)
 texture = ExtResource("2_5q7mh")
