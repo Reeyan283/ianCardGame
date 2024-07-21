@@ -77,7 +77,7 @@ func _physics_process(delta):
 				$"../../Cards".set_state($"../../Cards".InMouseBottom, 20)
 				in_top_flag = false
 			if not in_top_flag and position_to_slot(get_viewport().get_mouse_position()) != $"../../Cards".gap_index:
-				$"../../Cards".set_state($"../../Cards".InMouseBottom, position_to_slot(get_viewport().get_mouse_position()))
+				$"../../Cards".gap_index = position_to_slot(get_viewport().get_mouse_position())
 				$"../../Cards".align_cards()
 		Focusing:
 			move(delta,focus_time)
@@ -117,7 +117,7 @@ func reposition(newState,slot_num,total_slots):
 			start_scale = scale
 			target_rot = 0
 			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * 1.75
-			target_pos.x = $'../../'.CARD_SIZE.x * 0.5
+			target_pos.x = (hand_circle_center + hand_circle_angle_vector).x + $'../../'.CARD_SIZE.x * 0.5
 			target_scale = focus_scale
 
 func _on_focus_mouse_entered():
@@ -126,9 +126,9 @@ func _on_focus_mouse_entered():
 			if $"../../Cards".state == $"../../Cards".Neutral:
 				$"../../Cards".set_state($"../../Cards".Focusing, index)
 				$"../../Cards".align_cards()
+				reposition(Focusing,index, $"../../Cards".total_cards)
 				target_rot = 0
 				target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * 1.75
-				target_pos.x -= $'../../'.CARD_SIZE.x * 0.5
 				target_scale = focus_scale
 				state = Focusing
 				t=0
@@ -168,18 +168,20 @@ func _input(event):
 		InMouse:
 			if event.is_action_released("ui_select"):
 				if in_top_flag:
-					state = Neutral
 					$"../../Cards".add_card(self,$"../../Cards".total_cards)
+					state = Neutral
 					reposition(MovingLong,index,$"../../Cards".total_cards)
 					$"../../Cards".set_neutral()
 				else:
-					state = Neutral
 					$"../../Cards".add_card(self,$"../../Cards".gap_index)
+					state = Neutral
 					reposition(MovingShort,index,$"../../Cards".total_cards)
 					$"../../Cards".set_neutral()
 
 func position_to_slot(pos : Vector2) -> int:
 	var deviation = (PI/2 + hand_circle_center.angle_to_point(pos))/HAND_SPREAD_ANGLE
+	if $"../../Cards".total_cards % 2 == 1:
+		deviation += 0.5
 	var gap_index = round(($"../../Cards".total_cards)/2 + deviation)
 	if gap_index < 0:
 		return 0
