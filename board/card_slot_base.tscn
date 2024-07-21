@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dldp6ayg0exgg"]
+
+[ext_resource type="Script" path="res://board/card_slot_base.gd" id="1_hyecm"]
+[ext_resource type="Texture2D" uid="uid://cxq0vycrpbb40" path="res://assets/cards/focusBorder.png" id="2_m5c50"]
+
+[node name="CardSlotBase" type="MarginContainer"]
+offset_right = 481.0
+offset_bottom = 481.0
+pivot_offset = Vector2(240, 240)
+script = ExtResource("1_hyecm")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("2_m5c50")
+centered = false

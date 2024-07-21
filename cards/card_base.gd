@@ -1,6 +1,8 @@
 extends MarginContainer
 
 @onready var card_database: Script = preload("res://assets/cards/card_database.gd")
+@onready var play_space = $'../../../'
+
 var card_name : String
 @onready var card_info: Array = card_database.DATA.get(card_database[card_name])
 @onready var card_img_path: String = str("res://assets/cards/", card_info[0], "/", card_name, ".png")
@@ -17,6 +19,7 @@ var organize_time: float = 0.2
 var focus_time: float = 0.25
 var freeze_time: float = 0
 var in_mouse_time: float = 0.1
+var draw_shift_delay: float = 0.55
 
 # Card States
 enum{
@@ -42,32 +45,14 @@ func _ready():
 
 
 var setup_flag: bool = true
+var draw_shift_flag: bool = true
 var start_scale: Vector2 = Vector2()
 var hand_pos: Vector2 = Vector2()
 var focus_size: float = 2
 var focus_organize_flag: bool = true
 var hand_card_count: int = 0
-var index = 0
-
 var card_select_flag: bool = true
-func _input(event):
-	match state:
-		FocusInHand, InMouse:
-			if event.is_action_pressed("ui_select"):
-				if card_select_flag:
-					state = InMouse
-					setup_flag = true
-					card_select_flag = false
-				else:
-					target_pos = hand_pos
-					state = OrganiseHand
-					$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false, 0)
-					setup_flag = true
-					focus_organize_flag = true
-					card_select_flag = true
-		InPlay:
-			pass
-		
+var index = 0
 
 func _physics_process(delta):
 	match state:
@@ -79,13 +64,13 @@ func _physics_process(delta):
 			if setup_flag:
 				setup()
 			if t <=1:
-				position = start_pos.lerp(get_global_mouse_position() - $'../../'.CARD_SIZE * .5, t)
+				position = start_pos.lerp(get_global_mouse_position() - play_space.CARD_SIZE * .5, t)
 				rotation = start_rot * (1-t) + 0*t
 				scale = start_scale * (1-t) + orignal_scale * t
 				
 				increment_t(delta,in_mouse_time)
 			else:
-				position = get_global_mouse_position() - $'../../'.CARD_SIZE * .5
+				position = get_global_mouse_position() - play_space.CARD_SIZE * .5
 				rotation = target_rot
 		FocusInHand:
 			if setup_flag:
@@ -99,7 +84,7 @@ func _physics_process(delta):
 				
 				if focus_organize_flag:
 					focus_organize_flag = false
-					hand_card_count = get_node("../../Cards").get_child_count()
+					hand_card_count = get_parent().get_child_count()
 					
 					for i in hand_card_count:
 						if i < index:
@@ -125,13 +110,17 @@ func _physics_process(delta):
 						$CardBack.visible = false
 				
 				increment_t(delta,draw_time)
+				
+				#if t >= draw_shift_delay and draw_shift_flag:
+				#	play_space.alignCards(true, 1)
+				#	draw_shift_flag = false
 			else:
-				print(target_pos)
 				position = target_pos
 				rotation = target_rot
 				scale.x = orignal_scale.x
 				state = InHand
 				t = 0
+
 		OrganiseHand:
 			if setup_flag:
 				setup()
@@ -166,6 +155,26 @@ func setup():
 	start_scale = scale
 	t = 0
 	setup_flag = false
+	
+func _input(event):
+	match state:
+		FocusInHand, InMouse:
+			if event.is_action_pressed("ui_select"):
+				if card_select_flag:
+					state = InMouse
+					setup_flag = true
+					card_select_flag = false
+			elif event.is_action_released("ui_select"):
+				if not card_select_flag:
+					target_pos = hand_pos
+					state = OrganiseHand
+					play_space.alignCards(false, 0)
+					setup_flag = true
+					focus_organize_flag = true
+					card_select_flag = true
+			
+		InPlay:
+			pass
 
 func _on_focus_mouse_entered():
 	match state:
@@ -174,7 +183,7 @@ func _on_focus_mouse_entered():
 			target_rot = 0
 			target_pos = hand_pos
 			freeze_time = 0
-			target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * focus_size * .75
+			target_pos.y = get_viewport().size.y - play_space.CARD_SIZE.y * focus_size * .75
 
 			state = FocusInHand
 
@@ -184,7 +193,7 @@ func _on_focus_mouse_exited():
 		FocusInHand:
 			target_pos = hand_pos
 			state = OrganiseHand
-			$'../../'.alignCards(get_node("../../Cards"), $'../../'.HAND_SPREAD_ANGLE, false, 0)
+			play_space.alignCards(false, 0)
 			setup_flag = true
 			focus_organize_flag = true
 			

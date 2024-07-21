@@ -2,6 +2,8 @@ extends TextureButton
 
 var draw_card_list: Array =  [
 	"castle",
+	"castle",
+	"castle",
 	"house",
 	"house",
 	"house",
