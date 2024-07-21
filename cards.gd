@@ -34,7 +34,7 @@ func remove_card(card: Node):
 	var card_node = get_children()
 	total_cards -= 1
 	for c in card_node:
-		if c.index >= card.index:
+		if c.index > card.index:
 			c.index -= 1
 	card.index = -1
 
