@@ -14,8 +14,6 @@ var hand_circle_angle: float = 0
 var hand_circle_angle_vector: Vector2 = Vector2()
 const HAND_SPREAD_ANGLE: float = .047
 
-var hand_card_count = 0
-
 var card_slot_states = []
 func _ready():
 	var card_slot = CARD_SLOT.instantiate()
@@ -26,7 +24,9 @@ func _ready():
 	pass
 
 func draw_card(deck : Array) -> String:
-	hand_circle_angle = PI/2 - HAND_SPREAD_ANGLE*(float(hand_card_count)/2)
+	var cards_node: Node = get_node("Cards/Hand")
+	var card_count: int = cards_node.get_child_count()
+	hand_circle_angle = PI/2 - HAND_SPREAD_ANGLE*(float(card_count)/2)
 	
 	var new_card = CARD_BASE.instantiate()
 	
@@ -43,13 +43,12 @@ func draw_card(deck : Array) -> String:
 	new_card.target_rot = PI/2 - hand_circle_angle
 	new_card.state = new_card.MoveDrawnCardToHand
 	
-	new_card.index = hand_card_count
+	new_card.index = card_count
 	
 	alignCards(true, 0.55)
 
 	$Cards/Hand.add_child(new_card)
 	
-	hand_card_count += 1
 	
 	return new_card.card_name
 	

@@ -149,6 +149,21 @@ func align_neighbor_card(card_index : int, right : bool, spread_factor: float):
 	if not card.state == MoveDrawnCardToHand:
 		card.state = OrganiseHand
 
+func find_nearest_slot():
+	var adjusted_pos = position + play_space.CARD_SIZE * .5
+	var nearest_slot = INF
+	var largest_dist = -INF
+	var largest_slot_pos = []
+	for card_slot in play_space.find_child("CardSlots").get_children():
+		var card_slot_pos = card_slot.position + play_space.CARD_SIZE * .5
+		var dist = sqrt(((card_slot_pos.x - adjusted_pos.x) * (card_slot_pos.x - adjusted_pos.x)) + ((card_slot_pos.y - adjusted_pos.y) * (card_slot_pos.y - adjusted_pos.y)))
+		
+		if dist > largest_dist:
+			largest_dist = dist
+			nearest_slot = card_slot
+			largest_slot_pos = card_slot_pos
+		
+	return [largest_dist, nearest_slot]
 func setup():
 	start_pos = position
 	start_rot = rotation
@@ -166,12 +181,21 @@ func _input(event):
 					card_select_flag = false
 			elif event.is_action_released("ui_select"):
 				if not card_select_flag:
-					target_pos = hand_pos
-					state = OrganiseHand
-					play_space.alignCards(false, 0)
-					setup_flag = true
-					focus_organize_flag = true
-					card_select_flag = true
+					if find_nearest_slot()[0] < 100:
+						position = find_nearest_slot()[1].position
+						state = InPlay
+						reparent(find_nearest_slot()[1])
+						play_space.alignCards(false, 0)
+						setup_flag = true
+						focus_organize_flag = true
+						card_select_flag = true
+					else:
+						target_pos = hand_pos
+						state = OrganiseHand
+						play_space.alignCards(false, 0)
+						setup_flag = true
+						focus_organize_flag = true
+						card_select_flag = true
 			
 		InPlay:
 			pass
