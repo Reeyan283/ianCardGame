@@ -167,7 +167,14 @@ func _input(event):
 				state = InMouse
 		InMouse:
 			if event.is_action_released("ui_select"):
-				if in_top_flag:
+				var nearest_slot_dist = find_nearest_slot()[0]
+				var nearest_slot = find_nearest_slot()[1]
+				print(nearest_slot.get_child_count())
+				if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
+					position = find_nearest_slot()[1].position
+					state = InPlay
+					$"../../Cards".set_neutral()
+				elif in_top_flag:
 					$"../../Cards".add_card(self,$"../../Cards".total_cards)
 					state = Neutral
 					reposition(MovingLong,index,$"../../Cards".total_cards)
@@ -189,3 +196,19 @@ func position_to_slot(pos : Vector2) -> int:
 		return $"../../Cards".total_cards
 	else:
 		return gap_index
+
+func find_nearest_slot():
+	var adjusted_pos = position + $'../../'.CARD_SIZE * .5
+	var nearest_slot = INF
+	var largest_dist = -INF
+	var largest_slot_pos = []
+	for card_slot in $'../../'.find_child("CardSlots").get_children():
+		var card_slot_pos = card_slot.position + $'../../'.CARD_SIZE * .5
+		var dist = sqrt(((card_slot_pos.x - adjusted_pos.x) * (card_slot_pos.x - adjusted_pos.x)) + ((card_slot_pos.y - adjusted_pos.y) * (card_slot_pos.y - adjusted_pos.y)))
+		
+		if dist > largest_dist:
+			largest_dist = dist
+			nearest_slot = card_slot
+			largest_slot_pos = card_slot_pos
+		
+	return [largest_dist, nearest_slot]
