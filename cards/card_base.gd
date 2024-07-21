@@ -181,10 +181,14 @@ func _input(event):
 					card_select_flag = false
 			elif event.is_action_released("ui_select"):
 				if not card_select_flag:
-					if find_nearest_slot()[0] < 100:
+					var nearest_slot_dist = find_nearest_slot()[0]
+					var nearest_slot = find_nearest_slot()[1]
+					print(nearest_slot.get_child_count())
+					if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
 						position = find_nearest_slot()[1].position
 						state = InPlay
 						reparent(find_nearest_slot()[1])
+						
 						play_space.alignCards(false, 0)
 						setup_flag = true
 						focus_organize_flag = true
