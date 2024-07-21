@@ -2,11 +2,15 @@ extends Node2D
 
 const CARD_BASE = preload("res://cards/card_base.tscn")
 const CARD_SLOT = preload("res://board/card_slot_base.tscn")
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 const CARD_SIZE = Vector2(128, 128)
 
 var card_selected = []
 
+<<<<<<< Updated upstream
 @onready var hand_circle_center: Vector2 = Vector2(get_viewport().size.x, get_viewport().size.y) * Vector2(0.5, 3.65)
 @onready var hand_circle_radius: int = get_viewport().size.x * 1.5
 
@@ -14,6 +18,8 @@ var hand_circle_angle: float = 0
 var hand_circle_angle_vector: Vector2 = Vector2()
 const HAND_SPREAD_ANGLE: float = .047
 
+=======
+>>>>>>> Stashed changes
 var card_slot_states = []
 func _ready():
 	var card_slot = CARD_SLOT.instantiate()

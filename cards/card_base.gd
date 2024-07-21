@@ -230,3 +230,72 @@ func increment_t(delta, time : float):
 		freeze_time -= delta
 	else:
 		t += delta/float(time)
+<<<<<<< Updated upstream
+=======
+	else:
+		position = target_pos
+		rotation = target_rot
+		scale = target_scale
+		if state != Focusing:
+			state = InHand
+		t = 2
+
+func _input(event):
+	match state:
+		Focusing:
+			if event.is_action_pressed("ui_select"):
+				$"../../Cards".remove_card(self)
+				$"../../Cards".set_state($"../../Cards".InMouseBottom, index)
+				$"../../Cards".align_cards()
+				start_scale = scale
+				target_scale = original_scale
+				t=0
+				state = InMouse
+		InMouse:
+			if event.is_action_released("ui_select"):
+				var nearest_slot_dist = find_nearest_slot()[0]
+				var nearest_slot = find_nearest_slot()[1]
+				print(nearest_slot.get_child_count())
+				if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
+					position = find_nearest_slot()[1].position
+					state = InPlay
+					$"../../Cards".set_neutral()
+				elif in_top_flag:
+					$"../../Cards".add_card(self,$"../../Cards".total_cards)
+					state = Neutral
+					reposition(MovingLong,index,$"../../Cards".total_cards)
+					$"../../Cards".set_neutral()
+				else:
+					$"../../Cards".add_card(self,$"../../Cards".gap_index)
+					state = Neutral
+					reposition(MovingShort,index,$"../../Cards".total_cards)
+					$"../../Cards".set_neutral()
+
+func position_to_slot(pos : Vector2) -> int:
+	var deviation = (PI/2 + hand_circle_center.angle_to_point(pos))/HAND_SPREAD_ANGLE
+	if $"../../Cards".total_cards % 2 == 1:
+		deviation += 0.5
+	var gap_index = round(($"../../Cards".total_cards)/2 + deviation)
+	if gap_index < 0:
+		return 0
+	elif gap_index > $"../../Cards".total_cards:
+		return $"../../Cards".total_cards
+	else:
+		return gap_index
+
+func find_nearest_slot():
+	var adjusted_pos = position + $'../../'.CARD_SIZE * .5
+	var nearest_slot = INF
+	var largest_dist = -INF
+	var largest_slot_pos = []
+	for card_slot in $'../../'.find_child("CardSlots").get_children():
+		var card_slot_pos = card_slot.position + $'../../'.CARD_SIZE * .5
+		var dist = sqrt(((card_slot_pos.x - adjusted_pos.x) * (card_slot_pos.x - adjusted_pos.x)) + ((card_slot_pos.y - adjusted_pos.y) * (card_slot_pos.y - adjusted_pos.y)))
+		
+		if dist > largest_dist:
+			largest_dist = dist
+			nearest_slot = card_slot
+			largest_slot_pos = card_slot_pos
+		
+	return [largest_dist, nearest_slot]
+>>>>>>> Stashed changes
