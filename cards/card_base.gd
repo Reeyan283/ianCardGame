@@ -1,6 +1,7 @@
 extends MarginContainer
 
 @onready var card_database: Script = preload("res://cards/card_database.gd")
+@onready var card_img_script: Script = preload("res://cards/card_art.gd")
 
 #Common Node Paths
 @onready var play_space_node = $"../../../"
@@ -55,13 +56,15 @@ var drawing_flag: bool = true
 
 var state = Neutral
 
+var card_img = MarginContainer
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var card_size = size
-	$Card.texture = ImageTexture.create_from_image(Image.load_from_file(card_img_path))
-	$Card.scale = card_size/$Card.texture.get_size()
-	$Focus.scale = card_size/$Focus.get_size()
-	$CardBack.scale = card_size/$CardBack.texture.get_size()
+	card_img = card_img_script.instance(card_name)
+	add_child(card_img, true, 1)
+	$Focus.scale = card_img.size/$Focus.get_size()
+
+	
+
 
 func _physics_process(delta):
 	match state:
@@ -93,12 +96,12 @@ func _physics_process(delta):
 		Focusing:
 			move(delta,focus_time)
 		MovingLong:
-			if drawing_flag and $CardBack.visible:
+			if drawing_flag and card_img.card_back.visible:
 				target_scale.x = -original_scale.x
 				if t >= 0.5:
 					start_scale.x = -original_scale.x
 					target_scale.x = original_scale.x
-					$CardBack.visible = false
+					card_img.card_back.visible = false
 					drawing_flag = false
 			if position.y > get_viewport().size.y * shift_line and in_top_flag:
 				hand_node.align_cards()
@@ -132,6 +135,7 @@ func reposition(newState,slot_num,total_slots):
 			target_scale = focus_scale
 
 func _on_focus_mouse_entered():
+	print("HI")
 	match state:
 		InHand, MovingShort, Neutral:
 			if hand_node.state == hand_node.Neutral:
