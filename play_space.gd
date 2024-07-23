@@ -7,6 +7,19 @@ const CARD_SIZE = Vector2(128, 128)
 var card_selected = []
 var card_slot_states = []
 
+enum {
+	Mulligan,
+	DrawCard,
+	PositionCard,
+	PlayCard,
+	DestroyCard,
+	CardAura,
+	InfluenceVoting,
+	Apocalypse
+}
+var action_queue : Array = [DrawCard, PositionCard]
+var card_queue: Array = [[],[]]
+
 func _ready():
 	var card_slot = CARD_SLOT.instantiate()
 	card_slot.position = get_viewport().size * 0.4
@@ -26,3 +39,12 @@ func draw_card(input_card : String):
 	$CardsInHand.add_card(new_card, $CardsInHand.total_cards)
 	
 	new_card.position_in_hand(new_card.MovingToHand,new_card.index,$CardsInHand.total_cards)
+
+func next_action():
+	action_queue.remove_at(0)
+	card_queue.remove_at(0)
+	match action_queue:
+		DrawCard:
+			pass
+		PlayCard:
+			pass
