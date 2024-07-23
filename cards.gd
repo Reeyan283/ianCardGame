@@ -45,3 +45,9 @@ func set_neutral():
 func set_state(new_state, new_index):
 	state = new_state
 	gap_index = new_index
+
+func highlight_all():
+	var card_node = get_children()
+	for c in card_node:
+		if c.index >= 0:
+			c.get_child(3).visible = true

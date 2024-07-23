@@ -12,7 +12,7 @@ script = ExtResource("1_1f80y")
 
 [node name="CardSlots" type="Node" parent="."]
 
-[node name="CardsInHand" type="Node" parent="."]
+[node name="Hand" type="Node" parent="."]
 script = ExtResource("2_yhdw5")
 
 [node name="Background" type="Sprite2D" parent="."]
@@ -20,17 +20,22 @@ visible = false
 position = Vector2(963, 544)
 texture = ExtResource("2_5q7mh")
 
-[node name="Deck" type="Node2D" parent="."]
-position = Vector2(1550, 250)
-
-[node name="DrawDeck" type="TextureButton" parent="Deck"]
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
+[node name="DrawDeck" type="TextureButton" parent="."]
+offset_left = 1486.0
+offset_top = 186.0
+offset_right = 1614.0
+offset_bottom = 314.0
 texture_normal = ExtResource("3_nnov3")
 texture_pressed = ExtResource("3_nnov3")
 texture_hover = ExtResource("3_nnov3")
 texture_disabled = ExtResource("4_m63wi")
 stretch_mode = 0
 script = ExtResource("5_cfhi0")
+
+[node name="Highlight" type="Line2D" parent="DrawDeck"]
+visible = false
+position = Vector2(64, 64)
+points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+closed = true
+width = 2.0
+default_color = Color(0.860351, 0.490069, 0.312437, 1)

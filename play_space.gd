@@ -8,6 +8,7 @@ var card_selected = []
 var card_slot_states = []
 
 enum {
+	TurnStart,
 	Mulligan,
 	DrawCard,
 	PositionCard,
@@ -15,10 +16,13 @@ enum {
 	DestroyCard,
 	CardAura,
 	InfluenceVoting,
-	Apocalypse
+	Apocalypse,
+	TurnEnd
 }
-var action_queue : Array = [DrawCard, PositionCard]
-var card_queue: Array = [[],[]]
+var action_queue : Array = [TurnStart, DrawCard, PositionCard, TurnEnd]
+var next_action_queue : Array = [TurnStart, DrawCard, PositionCard, TurnEnd]
+var card_queue: Array = [[],[],[],[]]
+var next_card_queue: Array = [[],[],[],[]]
 
 func _ready():
 	var card_slot = CARD_SLOT.instantiate()
@@ -26,6 +30,7 @@ func _ready():
 	card_slot.size = CARD_SIZE
 	$CardSlots.add_child(card_slot)
 	card_slot_states.append(false)
+	next_action()
 	pass
 
 func draw_card(input_card : String):
@@ -33,18 +38,23 @@ func draw_card(input_card : String):
 	
 	new_card.card_name = input_card
 	new_card.scale = CARD_SIZE/new_card.size
-	new_card.position = $Deck.position - CARD_SIZE/2
+	new_card.position = $DrawDeck.position
 	
-	$CardsInHand.add_child(new_card)
-	$CardsInHand.add_card(new_card, $CardsInHand.total_cards)
+	$Hand.add_child(new_card)
+	$Hand.add_card(new_card, $Hand.total_cards)
 	
-	new_card.position_in_hand(new_card.MovingToHand,new_card.index,$CardsInHand.total_cards)
+	new_card.position_in_hand(new_card.MovingToHand,new_card.index,$Hand.total_cards)
 
 func next_action():
 	action_queue.remove_at(0)
 	card_queue.remove_at(0)
-	match action_queue:
+	match action_queue[0]:
 		DrawCard:
-			pass
-		PlayCard:
-			pass
+			$DrawDeck.drawing_active = true
+			$DrawDeck/Highlight.visible = true
+		PositionCard:
+			$Hand.highlight_all()
+		TurnEnd:
+			action_queue = next_action_queue
+			card_queue = next_card_queue
+			next_action()

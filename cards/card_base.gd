@@ -66,15 +66,15 @@ func _physics_process(delta):
 				scale = target_scale
 			if in_hand == true:
 				if position.y < hand_line and not in_top:
-					$"../../CardsInHand".set_state($"../../CardsInHand".InMouseTop, 20)
-					$"../../CardsInHand".align_cards()
+					$"../../Hand".set_state($"../../Hand".InMouseTop, 20)
+					$"../../Hand".align_cards()
 					in_top = true
 				if position.y > hand_line and in_top:
-					$"../../CardsInHand".set_state($"../../CardsInHand".InMouseBottom, 20)
+					$"../../Hand".set_state($"../../Hand".InMouseBottom, 20)
 					in_top = false
-				if not in_top and position_to_index(get_viewport().get_mouse_position()) != $"../../CardsInHand".gap_index:
-					$"../../CardsInHand".gap_index = position_to_index(get_viewport().get_mouse_position())
-					$"../../CardsInHand".align_cards()
+				if not in_top and position_to_index(get_viewport().get_mouse_position()) != $"../../Hand".gap_index:
+					$"../../Hand".gap_index = position_to_index(get_viewport().get_mouse_position())
+					$"../../Hand".align_cards()
 		Focusing:
 			move(delta,focus_time)
 		MovingToHand:
@@ -86,7 +86,7 @@ func _physics_process(delta):
 					$CardBack.visible = false
 					is_drawing = false
 			if position.y > hand_line and in_top:
-				$"../../CardsInHand".align_cards()
+				$"../../Hand".align_cards()
 				in_top = false
 			move(delta, move_long_time)
 		MovingInHand:
@@ -119,10 +119,10 @@ func position_in_hand(newState,slot_num,total_slots):
 func _on_focus_mouse_entered():
 	match state:
 		MovingInHand, Neutral:
-			if $"../../CardsInHand".state == $"../../CardsInHand".Neutral:
-				$"../../CardsInHand".set_state($"../../CardsInHand".Focusing, index)
-				$"../../CardsInHand".align_cards()
-				position_in_hand(Focusing,index, $"../../CardsInHand".total_cards)
+			if $"../../Hand".state == $"../../Hand".Neutral:
+				$"../../Hand".set_state($"../../Hand".Focusing, index)
+				$"../../Hand".align_cards()
+				position_in_hand(Focusing,index, $"../../Hand".total_cards)
 				target_rot = 0
 				target_pos.y = get_viewport().size.y - $'../../'.CARD_SIZE.y * 1.75
 				target_scale = focus_scale
@@ -135,8 +135,8 @@ func _on_focus_mouse_exited():
 	match state:
 		Focusing:
 			state = Neutral
-			$"../../CardsInHand".set_neutral()
-			$"../../CardsInHand".align_cards()
+			$"../../Hand".set_neutral()
+			$"../../Hand".align_cards()
 		InPlay:
 			pass
 
@@ -157,9 +157,9 @@ func _input(event):
 	match state:
 		Focusing:
 			if event.is_action_pressed("ui_select"):
-				$"../../CardsInHand".remove_card(self)
-				$"../../CardsInHand".set_state($"../../CardsInHand".InMouseBottom, index)
-				$"../../CardsInHand".align_cards()
+				$"../../Hand".remove_card(self)
+				$"../../Hand".set_state($"../../Hand".InMouseBottom, index)
+				$"../../Hand".align_cards()
 				start_scale = scale
 				target_scale = original_scale
 				t=0
@@ -172,27 +172,27 @@ func _input(event):
 				if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
 					position = find_nearest_slot()[1].position
 					state = InPlay
-					$"../../CardsInHand".set_neutral()
+					$"../../Hand".set_neutral()
 				elif in_top:
-					$"../../CardsInHand".add_card(self,$"../../CardsInHand".total_cards)
+					$"../../Hand".add_card(self,$"../../Hand".total_cards)
 					state = Neutral
-					position_in_hand(MovingToHand,index,$"../../CardsInHand".total_cards)
-					$"../../CardsInHand".set_neutral()
+					position_in_hand(MovingToHand,index,$"../../Hand".total_cards)
+					$"../../Hand".set_neutral()
 				else:
-					$"../../CardsInHand".add_card(self,$"../../CardsInHand".gap_index)
+					$"../../Hand".add_card(self,$"../../Hand".gap_index)
 					state = Neutral
-					position_in_hand(MovingInHand,index,$"../../CardsInHand".total_cards)
-					$"../../CardsInHand".set_neutral()
+					position_in_hand(MovingInHand,index,$"../../Hand".total_cards)
+					$"../../Hand".set_neutral()
 
 func position_to_index(pos : Vector2) -> int:
 	var deviation = (PI/2 + hand_circle_center.angle_to_point(pos))/HAND_SPREAD_ANGLE
-	if $"../../CardsInHand".total_cards % 2 == 1:
+	if $"../../Hand".total_cards % 2 == 1:
 		deviation += 0.5
-	var gap_index = round(($"../../CardsInHand".total_cards)/2 + deviation)
+	var gap_index = round(($"../../Hand".total_cards)/2 + deviation)
 	if gap_index < 0:
 		return 0
-	elif gap_index > $"../../CardsInHand".total_cards:
-		return $"../../CardsInHand".total_cards
+	elif gap_index > $"../../Hand".total_cards:
+		return $"../../Hand".total_cards
 	else:
 		return gap_index
 
