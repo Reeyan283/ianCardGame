@@ -16,12 +16,13 @@ func _ready():
 	
 func populate_slots(start_pos: Vector2, size: Vector2):
 	for i in 7:
-		var card_slot: Node = CARD_SLOT.instantiate()
-		card_slot.position = start_pos
-		card_slot.position.x = start_pos.x + i * size.x
-		card_slot.size = size
-		$CardSlots.add_child(card_slot)
-		card_slot_states.append(false)
+		for j in 7:
+			var card_slot: Node = CARD_SLOT.instantiate()
+			card_slot.position.x = start_pos.x + j * size.x
+			card_slot.position.y = start_pos.y + i * size.y
+			card_slot.size = size
+			$CardSlots.add_child(card_slot)
+			card_slot_states.append(false)
 
 func draw_card(input_card : String):
 	var new_card = CARD_BASE.instantiate()

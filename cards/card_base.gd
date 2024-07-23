@@ -39,6 +39,8 @@ var target_pos: Vector2
 var start_rot: float
 var target_rot: float
 var start_scale: Vector2
+var start_size: Vector2
+var target_size: Vector2
 @onready var target_scale: Vector2 = original_scale
 @onready var focus_scale: Vector2 = original_scale*2
 
@@ -73,6 +75,8 @@ func _physics_process(delta):
 		InHand:
 			pass
 		InPlay:
+			scale = target_scale
+			size = target_size
 			pass
 		InMouse:
 			rotation = 0
@@ -135,7 +139,6 @@ func reposition(newState,slot_num,total_slots):
 			target_scale = focus_scale
 
 func _on_focus_mouse_entered():
-	print("HI")
 	match state:
 		InHand, MovingShort, Neutral:
 			if hand_node.state == hand_node.Neutral:
@@ -187,11 +190,11 @@ func _input(event):
 				
 				if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
 					position = find_nearest_slot()[1].position
-					size = play_space_node.CARD_SLOT_SIZE
-					scale = Vector2(1, 1)
 					state = InPlay
 					hand_node.set_neutral()
+					target_scale = play_space_node.CARD_SLOT_SIZE * .8/size
 					reparent(nearest_slot)
+
 				elif in_top_flag:
 					hand_node.add_card(self, hand_node.total_cards)
 					state = Neutral
