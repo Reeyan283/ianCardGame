@@ -25,10 +25,10 @@ var start_scale: Vector2
 
 var t: float = 0 
 var move_short_time: float = 0.2
-var move_long_time: float = 0.8
+var move_long_time: float = 0.7
 var focus_time: float = 0.25
 var scale_time = 0.1
-@onready var hand_line: float = get_viewport().size.y * 0.7
+@onready var hand_line: float = get_viewport().size.y * 0.71
 var in_top: bool = true
 var is_drawing: bool = true
 var in_hand: bool = true
