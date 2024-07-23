@@ -15,12 +15,12 @@ func align_cards():
 		if c.index >= 0:
 			match state:
 				Neutral, InMouseTop:
-					c.reposition(c.MovingShort,c.index,total_cards)
+					c.position_in_hand(c.MovingInHand,c.index,total_cards)
 				Focusing, InMouseBottom:
 					if c.index >= gap_index:
-						c.reposition(c.MovingShort,c.index + 1,total_cards + 1)
+						c.position_in_hand(c.MovingInHand,c.index + 1,total_cards + 1)
 					elif c.index >= 0:
-						c.reposition(c.MovingShort,c.index,total_cards + 1)
+						c.position_in_hand(c.MovingInHand,c.index,total_cards + 1)
 
 func add_card(card: Node, pos : int):
 	var card_node = get_children()

@@ -22,7 +22,7 @@ func draw_card(input_card : String):
 	new_card.scale = CARD_SIZE/new_card.size
 	new_card.position = $Deck.position - CARD_SIZE/2
 	
-	$Cards.add_child(new_card)
-	$Cards.add_card(new_card, $Cards.total_cards)
+	$CardsInHand.add_child(new_card)
+	$CardsInHand.add_card(new_card, $CardsInHand.total_cards)
 	
-	new_card.reposition(new_card.MovingLong,new_card.index,$Cards.total_cards)
+	new_card.position_in_hand(new_card.MovingToHand,new_card.index,$CardsInHand.total_cards)
