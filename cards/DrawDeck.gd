@@ -1,5 +1,7 @@
 extends TextureButton
 
+@onready var play_space = $'../../'
+
 var draw_card_list: Array =  [
 	"castle",
 	"castle",
@@ -19,7 +21,7 @@ var deck_size = draw_card_list.size()
 
 
 func _ready():
-	scale = $'../../'.CARD_SIZE/size
+	size = play_space.DECK_SIZE
 	draw_card_list.shuffle()
 	pass
 
