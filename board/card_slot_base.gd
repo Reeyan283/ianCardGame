@@ -2,9 +2,13 @@ extends MarginContainer
 
 enum {
 	Neutral,
+	Primed,
 	Receiving,
+	
 	Ruin,
+	RuinPrimed,
 	RuinReceiving,
+	
 	TentativeHold,
 	HasBuilding,
 	Movable
@@ -22,40 +26,55 @@ func _ready():
 
 func set_state(new_state):
 	match new_state:
-		Neutral:
-			state = Neutral
+		Neutral, Primed, Movable:
+			pass
 		Receiving:
-			state = Receiving
-		Ruin:
-			state = Neutral
+			pass
+		Ruin, RuinPrimed:
+			pass
 		RuinReceiving:
-			state = RuinReceiving
-		TentativeHold:
-			state = TentativeHold
-		HasBuilding:
-			state = HasBuilding
-		Movable:
-			state = Movable
+			pass
+		TentativeHold, HasBuilding:
+			pass
+	state = new_state
 
 
 func reset_state():
 	match state:
-		Receiving:
+		Primed, Receiving:
 			set_state(Neutral)
-		RuinReceiving:
+		RuinPrimed, RuinReceiving:
 			set_state(Ruin)
 		TentativeHold:
 			pass
 
-func set_receiving():
+func set_primed(inc_neutral : bool, inc_ruins :bool):
 	match state:
-		Neutral:
-			set_state(Receiving)
-		Ruin:
-			set_state(RuinReceiving)
+		Primed:
+			if inc_neutral:
+				set_state(Primed)
+		RuinPrimed:
+			if inc_ruins:
+				set_state(RuinPrimed)
+
+func set_receiving(inc_neutral : bool, inc_ruins :bool):
+	match state:
+		Primed:
+			if inc_neutral:
+				set_state(Receiving)
+		RuinPrimed:
+			if inc_ruins:
+				set_state(RuinReceiving)
 
 func set_movable():
 	if state == HasBuilding:
 		set_state(Movable)
 		var card = get_child(1)
 		card.state = card.MovableInHand
+
+func return_to_primed():
+	match state:
+		Receiving:
+			set_state(Primed)
+		RuinReceiving:
+			set_state(RuinPrimed)

@@ -25,9 +25,18 @@ func reset_all():
 		for j in 7:
 			card_slots_array[i][j].reset_state()
 
+func group_set_primed(inc_neutral: bool, inc_ruins: bool):
+	for i in 7:
+		for j in 7:
+			card_slots_array[i][j].set_primed(inc_neutral, inc_ruins)
+
 func group_set_receiving(inc_neutral: bool, inc_ruins: bool):
 	for i in 7:
 		for j in 7:
-			var slot = card_slots_array[i][j]
-			if (slot.state == slot.Neutral and inc_neutral) or (slot.state == slot.Ruin and inc_ruins):
-				slot.set_receiving()
+			card_slots_array[i][j].set_receiving(inc_neutral, inc_ruins)
+
+func group_return_to_primed():
+	for i in 7:
+		for j in 7:
+			card_slots_array[i][j].return_to_primed()
+
