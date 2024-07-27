@@ -1,13 +1,18 @@
 extends Node
-var total_cards: int = 0
+
+@onready var card_slots = $/root/PlaySpace/CardSlots
+
 enum {
 	Neutral,
 	InMouseBottom,
 	InMouseTop,
 	Focusing
 }
+
 var state = Neutral
-var gap_index = 20
+var total_cards: int = 0
+var gap_index: int
+var positioning_active: bool = false
 
 func align_cards():
 	var cards_node = get_children()
@@ -40,7 +45,6 @@ func remove_card(card: Node):
 
 func set_neutral():
 	state = Neutral
-	gap_index = 20
 
 func set_state(new_state, new_index):
 	state = new_state
@@ -51,3 +55,10 @@ func highlight_all():
 	for c in cards_node:
 		if c.index >= 0:
 			c.get_child(1).visible = true
+
+func enter_mouse(card):
+	remove_card(card)
+	set_state(InMouseBottom, card.index)
+	align_cards()
+	if positioning_active:
+		card_slots.group_set_receiving()

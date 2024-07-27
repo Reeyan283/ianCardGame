@@ -200,9 +200,7 @@ func _input(event):
 	match state:
 		FocusingInHand:
 			if event.is_action_pressed("ui_select"):
-				hand.remove_card(self)
-				hand.set_state(hand.InMouseBottom, index)
-				hand.align_cards()
+				hand.enter_mouse(self)
 				start_scale = scale
 				target_scale = original_scale
 				t=0
@@ -212,12 +210,11 @@ func _input(event):
 				var nearest_slot_dist = find_nearest_slot()[0]
 				var nearest_slot = find_nearest_slot()[1]
 				
-				if nearest_slot_dist < 72 and nearest_slot.get_child_count() == 1:
-					position = find_nearest_slot()[1].position
+				if nearest_slot_dist < 72 and nearest_slot.state == nearest_slot.Receiving:
+					position = nearest_slot.position
 					hand.set_neutral()
 					scale = play_space.CARD_SLOT_SIZE/size
 					target_pos = nearest_slot.position
-					reparent(nearest_slot)
 					t=0
 					state = InPlay
 

@@ -49,6 +49,7 @@ func next_action():
 			$DrawDeck/Highlight.visible = true
 		PositionCard:
 			$Hand.highlight_all()
+			$Hand.positioning_active
 		TurnEnd:
 			action_queue = next_action_queue
 			card_queue = next_card_queue
