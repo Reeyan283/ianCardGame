@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbtqfl8urr44l"]
+[gd_scene load_steps=8 format=3 uid="uid://cbtqfl8urr44l"]
 
 [ext_resource type="Script" path="res://play_space.gd" id="1_1f80y"]
 [ext_resource type="Script" path="res://ui/hand.gd" id="2_8oknd"]
+[ext_resource type="Script" path="res://card_slots.gd" id="2_ylfn3"]
 [ext_resource type="Texture2D" uid="uid://b5rh6uvm8ilqc" path="res://assets/backgrounds/bg.png" id="3_gq1bv"]
 [ext_resource type="Texture2D" uid="uid://b2irq0f3xkld" path="res://assets/cards/back.png" id="3_nnov3"]
 [ext_resource type="Texture2D" uid="uid://bai8rmc36ouyx" path="res://assets/board/empty_deck.png" id="4_m63wi"]
@@ -11,6 +12,7 @@
 script = ExtResource("1_1f80y")
 
 [node name="CardSlots" type="Node" parent="."]
+script = ExtResource("2_ylfn3")
 
 [node name="Hand" type="Node" parent="."]
 script = ExtResource("2_8oknd")

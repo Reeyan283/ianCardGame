@@ -40,4 +40,4 @@ func _gui_input(_event):
 				drawing_active = false
 				cards_to_draw = 1
 				$'Highlight'.visible = false
-				$'../'.next_action()
+				$/root/PlaySpace.next_action()
