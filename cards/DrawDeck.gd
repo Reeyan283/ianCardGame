@@ -1,6 +1,6 @@
 extends TextureButton
 
-@onready var play_space = $'../'
+@onready var play_space = $/root/PlaySpace
 
 var draw_card_list: Array =  [
 	"castle",

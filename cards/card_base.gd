@@ -4,7 +4,7 @@ extends MarginContainer
 @onready var card_img_script: Script = preload("res://cards/card_art.gd")
 
 #Common Node Paths
-@onready var play_space = $"../../"
+@onready var play_space = $/root/PlaySpace
 @onready var hand = play_space.find_child("Hand")
 
 # Card States
