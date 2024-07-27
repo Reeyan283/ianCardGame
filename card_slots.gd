@@ -19,3 +19,15 @@ func populate_slots(start_pos: Vector2, size: Vector2):
 			add_child(card_slot)
 			card_slot_row.append(card_slot)
 		card_slots_array.append(card_slot_row)
+
+func reset_all():
+	for i in 7:
+		for j in 7:
+			card_slots_array[i][j].reset_state()
+
+func group_set_receiving(inc_neutral: bool, inc_ruins: bool):
+	for i in 7:
+		for j in 7:
+			var slot = card_slots_array[i][j]
+			if (slot.state == slot.Neutral and inc_neutral) or (slot.state == slot.Ruin and inc_ruins):
+				slot.set_receiving()

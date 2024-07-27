@@ -75,9 +75,6 @@ func _ready():
 
 func _physics_process(delta):
 	match state:
-		Neutral, InHand, InPlay, MovableInPlay:
-			pass
-		
 		InMouseInHand:
 			rotation = 0
 			position = get_viewport().get_mouse_position() - card_offset
