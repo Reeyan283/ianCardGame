@@ -46,8 +46,6 @@ var target_pos: Vector2
 var start_rot: float
 var target_rot: float
 var start_scale: Vector2
-var start_size: Vector2
-var target_size: Vector2
 @onready var target_scale: Vector2 = original_scale
 @onready var focus_scale: Vector2 = original_scale*2
 @onready var card_offset = play_space.CARD_SIZE * .5
@@ -219,10 +217,12 @@ func _input(event):
 				
 				if nearest_slot_dist < 72 and nearest_slot.get_child_count() == 1:
 					position = find_nearest_slot()[1].position
-					state = InPlay
 					hand.set_neutral()
-					target_scale = play_space.CARD_SLOT_SIZE * .8/size
+					scale = play_space.CARD_SLOT_SIZE/size
+					target_pos = nearest_slot.position
 					reparent(nearest_slot)
+					t=0
+					state = InPlay
 
 				elif in_top:
 					hand.add_card(self, hand.total_cards)

@@ -18,6 +18,7 @@ script = ExtResource("2_ylfn3")
 script = ExtResource("2_8oknd")
 
 [node name="Background" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(963, 544)
 texture = ExtResource("3_gq1bv")
 
