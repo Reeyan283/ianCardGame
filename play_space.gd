@@ -10,10 +10,27 @@ const CARD_SLOT_SIZE: Vector2 = Vector2(120, 120)
 var card_selected = []
 var card_slot_states = []
 
-func _ready():
+enum {
+	TurnStart,
+	Mulligan,
+	DrawCard,
+	PositionCard,
+	PlayCard,
+	DestroyCard,
+	CardAura,
+	InfluenceVoting,
+	Apocalypse,
+	TurnEnd
+}
+var action_queue : Array = [TurnStart, DrawCard, PositionCard, TurnEnd]
+var next_action_queue : Array = [TurnStart, DrawCard, PositionCard, TurnEnd]
+var card_queue: Array = [[],[],[],[]]
+var next_card_queue: Array = [[],[],[],[]]
 
+func _ready():
 	populate_slots(Vector2(420, 84), CARD_SLOT_SIZE)
-	
+	next_action()
+
 func populate_slots(start_pos: Vector2, size: Vector2):
 	for i in 7:
 		for j in 7:
@@ -29,9 +46,23 @@ func draw_card(input_card : String):
 	
 	new_card.card_name = input_card
 	new_card.scale = CARD_SIZE/new_card.size
-	new_card.position = $Deck.position - CARD_SIZE/2
+	new_card.position = $DrawDeck.position - CARD_SIZE/2
 	
-	$Cards/Hand.add_child(new_card)
-	$Cards/Hand.add_card(new_card, $Cards/Hand.total_cards)
+	$Hand.add_child(new_card)
+	$Hand.add_card(new_card, $Hand.total_cards)
 	
-	new_card.reposition(new_card.MovingLong,new_card.index,$Cards/Hand.total_cards)
+	new_card.position_in_hand(new_card.MovingToHand,new_card.index,$Hand.total_cards)
+
+func next_action():
+	action_queue.remove_at(0)
+	card_queue.remove_at(0)
+	match action_queue[0]:
+		DrawCard:
+			$DrawDeck.drawing_active = true
+			$DrawDeck/Highlight.visible = true
+		PositionCard:
+			$Hand.highlight_all()
+		TurnEnd:
+			action_queue = next_action_queue
+			card_queue = next_card_queue
+			next_action()
