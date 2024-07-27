@@ -25,16 +25,16 @@ func set_state(new_state):
 	match new_state:
 		Neutral, Primed, Movable:
 			if has_ruin:
-				pass
+				$Background.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/slots/ruin.png"))
 			else:
-				pass
+				$Background.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/slots/neutral.png"))
 		Receiving:
 			if has_ruin:
-				pass
+				$Background.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/slots/ruin_receiving.png"))
 			else:
-				pass
+				$Background.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/slots/receiving.png"))
 		TentativeHold, HasBuilding:
-			pass
+			$Background.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/slots/blank.png"))
 	state = new_state
 
 

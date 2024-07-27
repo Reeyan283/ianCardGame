@@ -61,4 +61,4 @@ func enter_mouse(card):
 	set_state(InMouseBottom, card.index)
 	align_cards()
 	if positioning_active:
-		card_slots.group_set_receiving()
+		card_slots.group_receiving(true,false)

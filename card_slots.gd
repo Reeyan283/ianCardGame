@@ -25,17 +25,17 @@ func reset_all():
 		for j in 7:
 			card_slots_array[i][j].reset_state()
 
-func group_set_primed(inc_neutral: bool, inc_ruins: bool):
+func group_prime(inc_neutral: bool, inc_ruins: bool):
 	for i in 7:
 		for j in 7:
 			card_slots_array[i][j].set_primed(inc_neutral, inc_ruins)
 
-func group_set_receiving(inc_neutral: bool, inc_ruins: bool):
+func group_receiving(inc_neutral: bool, inc_ruins: bool):
 	for i in 7:
 		for j in 7:
 			card_slots_array[i][j].set_receiving(inc_neutral, inc_ruins)
 
-func group_return_to_primed():
+func group_return_to_prime():
 	for i in 7:
 		for j in 7:
 			card_slots_array[i][j].return_to_primed()
