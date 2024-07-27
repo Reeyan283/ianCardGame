@@ -5,7 +5,7 @@ const CARD_SLOT: PackedScene = preload("res://board/card_slot_base.tscn")
 
 const CARD_SIZE: Vector2 = Vector2(128, 128)
 const DECK_SIZE: Vector2 = Vector2(200, 200)
-const CARD_SLOT_SIZE: Vector2 = Vector2(120, 120)
+const CARD_SLOT_SIZE: Vector2 = Vector2(100, 100)
 
 var card_selected = []
 var card_slot_states = []

@@ -53,7 +53,7 @@ var target_size: Vector2
 @onready var card_offset = play_space.CARD_SIZE * .5
 
 var t: float = 0 
-@onready var hand_line: float = get_viewport().size.y * 0.71
+@onready var hand_line: float = get_viewport().size.y * 0.73
 
 var move_short_time: float = 0.2
 var move_long_time: float = 0.7
@@ -217,7 +217,7 @@ func _input(event):
 				var nearest_slot_dist = find_nearest_slot()[0]
 				var nearest_slot = find_nearest_slot()[1]
 				
-				if nearest_slot_dist < 100 and nearest_slot.get_child_count() == 1:
+				if nearest_slot_dist < 72 and nearest_slot.get_child_count() == 1:
 					position = find_nearest_slot()[1].position
 					state = InPlay
 					hand.set_neutral()
