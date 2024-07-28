@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dldp6ayg0exgg"]
 
 [ext_resource type="Script" path="res://board/card_slot_base.gd" id="1_hyecm"]
-[ext_resource type="Texture2D" uid="uid://cxq0vycrpbb40" path="res://assets/cards/focusBorder.png" id="2_m5c50"]
+[ext_resource type="Texture2D" uid="uid://de2s10r31xpik" path="res://assets/slots/neutral.png" id="2_brk7o"]
 
 [node name="CardSlotBase" type="MarginContainer"]
 offset_right = 481.0
@@ -10,5 +10,10 @@ pivot_offset = Vector2(240, 240)
 script = ExtResource("1_hyecm")
 
 [node name="Background" type="Sprite2D" parent="."]
-texture = ExtResource("2_m5c50")
+texture = ExtResource("2_brk7o")
 centered = false
+
+[node name="Border" type="Line2D" parent="Background"]
+points = PackedVector2Array(0, 0, 0, 640, 640, 640, 640, 0)
+closed = true
+default_color = Color(0.0807833, 0.0807833, 0.0807833, 1)

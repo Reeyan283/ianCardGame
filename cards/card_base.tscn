@@ -11,5 +11,12 @@ script = ExtResource("1_nolih")
 [node name="Focus" type="TextureButton" parent="."]
 layout_mode = 2
 
+[node name="Highlight" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(128, 0, 128, 128, 0, 128, 0, 0)
+closed = true
+width = 2.0
+default_color = Color(0.878237, 0.407002, 0.284936, 1)
+
 [connection signal="mouse_entered" from="Focus" to="." method="_on_focus_mouse_entered"]
 [connection signal="mouse_exited" from="Focus" to="." method="_on_focus_mouse_exited"]
