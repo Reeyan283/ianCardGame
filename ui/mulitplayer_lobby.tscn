@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dlrrileoxuu0i"]
+
+[node name="MulitplayerLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 127.0
+offset_top = 120.0
+offset_right = 327.0
+offset_bottom = 160.0
+text = "HOST"
+
+[node name="Button2" type="Button" parent="."]
+offset_left = 367.0
+offset_top = 120.0
+offset_right = 567.0
+offset_bottom = 160.0
+text = "JOIN
+"
+
+[node name="Button3" type="Button" parent="."]
+offset_left = 616.0
+offset_top = 120.0
+offset_right = 816.0
+offset_bottom = 160.0
+text = "START"
